@@ -1,40 +1,40 @@
-/* Root Colors - Luxury Theme: Rose Red, Yellow, Blue */
+/* Root Colors - Luxury Theme: Red Dragon Fruit, Gold Yellow, Minimalist */
 :root {
-    --rose-red: #c41e3a;
-    --dark-rose: #8b1428;
+    --dragon-red: #EE4540;
+    --dark-dragon: #c21f1f;
     --gold-yellow: #d4af37;
     --bright-yellow: #ffd700;
-    --royal-blue: #1e3a8a;
-    --sky-blue: #0066cc;
     --white: #ffffff;
-    --light-bg: #f8f7f5;
+    --light-bg: #faf8f6;
     --text-primary: #1a1a1a;
-    --text-secondary: #555555;
+    --text-secondary: #666666;
+    --text-grey: #888888;
+    --text-brown: #654321;
     --border-gray: #e8e6e1;
 }
 
 /* General Styles */
 body {
-    font-family: 'Playfair Display', 'Georgia', serif;
+    font-family: 'Calibri', 'Segoe UI', sans-serif;
     color: var(--text-primary);
     line-height: 1.7;
     background-color: var(--light-bg);
 }
 
 a {
-    color: var(--rose-red);
+    color: var(--dragon-red);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: var(--dark-rose);
+    color: var(--dark-dragon);
 }
 
 /* Navigation */
 .navbar-custom {
-    background: linear-gradient(135deg, var(--dark-rose) 0%, var(--royal-blue) 50%, var(--rose-red) 100%);
-    box-shadow: 0 4px 20px rgba(196, 30, 58, 0.2);
+    background: linear-gradient(135deg, var(--dragon-red) 0%, #cc3d3d 50%, var(--dark-dragon) 100%);
+    box-shadow: 0 4px 20px rgba(238, 69, 64, 0.2);
     padding: 1rem 0;
 }
 
@@ -43,7 +43,7 @@ a:hover {
     color: var(--gold-yellow) !important;
     letter-spacing: 1px;
     font-weight: 700;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
 }
 
 .navbar-custom .nav-link {
@@ -52,7 +52,7 @@ a:hover {
     font-weight: 500;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
 }
 
 .navbar-custom .nav-link:hover,
@@ -75,13 +75,13 @@ a:hover {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--rose-red), transparent);
+    background: linear-gradient(90deg, transparent, var(--dragon-red), transparent);
 }
 
 .hero-section h1 {
-    color: var(--dark-rose);
+    color: var(--dark-dragon);
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.08);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     font-size: 3.5rem;
     font-weight: 700;
     letter-spacing: -1px;
@@ -95,33 +95,33 @@ a:hover {
 }
 
 .btn-primary {
-    background-color: var(--rose-red);
-    border-color: var(--rose-red);
+    background-color: var(--dragon-red);
+    border-color: var(--dragon-red);
     font-weight: 600;
     padding: 0.85rem 2.5rem;
     transition: all 0.3s ease;
     border-radius: 4px;
     letter-spacing: 0.5px;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
 }
 
 .btn-primary:hover {
-    background-color: var(--dark-rose);
-    border-color: var(--dark-rose);
+    background-color: var(--dark-dragon);
+    border-color: var(--dark-dragon);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(196, 30, 58, 0.3);
+    box-shadow: 0 8px 20px rgba(238, 69, 64, 0.3);
 }
 
 .btn-outline-primary {
-    color: var(--rose-red);
-    border-color: var(--rose-red);
+    color: var(--dragon-red);
+    border-color: var(--dragon-red);
     font-weight: 600;
     border-width: 2px;
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--rose-red);
-    border-color: var(--rose-red);
+    background-color: var(--dragon-red);
+    border-color: var(--dragon-red);
     transform: translateY(-3px);
 }
 
@@ -132,10 +132,10 @@ a:hover {
 }
 
 .projects-section h2 {
-    color: var(--dark-rose);
+    color: var(--dark-dragon);
     font-size: 3rem;
     margin-bottom: 3.5rem;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     font-weight: 700;
     letter-spacing: -0.5px;
     position: relative;
@@ -150,7 +150,7 @@ a:hover {
     transform: translateX(-50%);
     width: 100px;
     height: 3px;
-    background: linear-gradient(90deg, var(--rose-red), var(--gold-yellow));
+    background: linear-gradient(90deg, var(--dragon-red), var(--gold-yellow));
 }
 
 /* Project Card */
@@ -158,7 +158,7 @@ a:hover {
     background: var(--white);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(196, 30, 58, 0.08);
+    box-shadow: 0 8px 25px rgba(238, 69, 64, 0.08);
     transition: all 0.4s ease;
     height: 100%;
     display: flex;
@@ -168,7 +168,7 @@ a:hover {
 
 .project-card:hover {
     transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(196, 30, 58, 0.15);
+    box-shadow: 0 20px 40px rgba(238, 69, 64, 0.15);
 }
 
 .project-header {
@@ -178,17 +178,17 @@ a:hover {
 }
 
 .game-header {
-    background: linear-gradient(135deg, var(--royal-blue) 0%, var(--sky-blue) 100%);
+    background: linear-gradient(135deg, var(--dragon-red) 0%, var(--bright-yellow) 100%);
 }
 
 .paper-header {
-    background: linear-gradient(135deg, var(--rose-red) 0%, var(--dark-rose) 100%);
+    background: linear-gradient(135deg, var(--dragon-red) 0%, #ff8c42 100%);
 }
 
 .project-header h3 {
     font-size: 1.6rem;
     margin: 0;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     letter-spacing: -0.5px;
 }
 
@@ -234,9 +234,9 @@ a:hover {
 }
 
 .about-section h2 {
-    color: var(--dark-rose);
+    color: var(--dark-dragon);
     font-size: 2.8rem;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     font-weight: 700;
     letter-spacing: -0.5px;
     margin-bottom: 2rem;
@@ -260,21 +260,21 @@ a:hover {
     padding: 2.5rem;
     border-radius: 8px;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.06);
+    box-shadow: 0 6px 20px rgba(238, 69, 64, 0.06);
     border: 1px solid var(--border-gray);
     transition: all 0.3s ease;
 }
 
 .stat-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(196, 30, 58, 0.12);
+    box-shadow: 0 12px 30px rgba(238, 69, 64, 0.12);
 }
 
 .stat-box h4 {
     font-size: 2.8rem;
-    color: var(--rose-red);
+    color: var(--dragon-red);
     margin-bottom: 0.5rem;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     font-weight: 700;
 }
 
@@ -287,7 +287,7 @@ a:hover {
 
 /* CTA Section */
 .cta-section {
-    background: linear-gradient(135deg, var(--dark-rose) 0%, var(--royal-blue) 50%, var(--rose-red) 100%);
+    background: linear-gradient(135deg, var(--dragon-red) 0%, #ff8c42 50%, var(--dark-dragon) 100%);
     padding: 5rem 0;
     position: relative;
     overflow: hidden;
@@ -307,7 +307,7 @@ a:hover {
 .cta-section h2 {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     font-weight: 700;
     position: relative;
     z-index: 1;
@@ -328,7 +328,7 @@ a:hover {
 
 .btn-outline-light:hover {
     background-color: var(--bright-yellow);
-    color: var(--dark-rose);
+    color: var(--dark-dragon);
     border-color: var(--bright-yellow);
 }
 
@@ -420,9 +420,9 @@ a:hover {
 }
 
 .container-placeholder h1 {
-    color: var(--dark-rose);
+    color: var(--dark-dragon);
     margin-bottom: 1rem;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
     font-size: 2.5rem;
 }
 
@@ -433,5 +433,5 @@ a:hover {
 
 /* Typography enhancements */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Calibri', sans-serif;
 }
