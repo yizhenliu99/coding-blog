@@ -148,6 +148,11 @@ class PacManGame {
             x = Math.floor(Math.random() * this.COLS);
             y = Math.floor(Math.random() * this.ROWS);
             valid = this.maze[y][x] === 0 || this.maze[y][x] === 2; // Empty or pellet space
+            
+            // Avoid unreachable ghost house interior (roughly center area)
+            if (valid && x >= 8 && x <= 11 && y >= 9 && y <= 12) {
+                valid = false;
+            }
         } while (!valid);
         
         this.rose = { x, y };
@@ -165,8 +170,8 @@ class PacManGame {
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.pacman.nextDir = 2;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) this.pacman.nextDir = 3;
         
-        // Shoot hearts when powered up and Space is pressed
-        if (this.poweredUp && (this.keys[' '] || this.keys['Spacebar'])) {
+        // Shoot hearts when powered up and B is pressed
+        if (this.poweredUp && (this.keys['b'] || this.keys['B'])) {
             this.shootHeart();
         }
     }
