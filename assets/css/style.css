@@ -1,195 +1,166 @@
-/* Root Colors - Luxury Theme: Red Dragon Fruit, Gold Yellow, Minimalist */
+/* Root Colors - Clean Professional Black & White */
 :root {
-    --dragon-red: #EE4540;
-    --dark-dragon: #c21f1f;
-    --gold-yellow: #d4af37;
-    --bright-yellow: #ffd700;
+    --black: #000000;
+    --dark-gray: #1a1a1a;
+    --medium-gray: #666666;
+    --light-gray: #f5f5f5;
     --white: #ffffff;
-    --light-bg: #faf8f6;
-    --text-primary: #1a1a1a;
-    --text-secondary: #666666;
-    --text-grey: #888888;
-    --text-brown: #654321;
-    --border-gray: #e8e6e1;
+    --accent: #d4af37;
 }
 
 /* General Styles */
 body {
     font-family: 'Calibri', 'Segoe UI', sans-serif;
-    color: var(--text-primary);
+    color: var(--black);
     line-height: 1.7;
-    background-color: var(--light-bg);
+    background-color: var(--white);
 }
 
 a {
-    color: var(--dragon-red);
+    color: var(--black);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: var(--dark-dragon);
+    color: var(--medium-gray);
 }
 
 /* Navigation */
 .navbar-custom {
-    background: linear-gradient(135deg, var(--dragon-red) 0%, #cc3d3d 50%, var(--dark-dragon) 100%);
-    box-shadow: 0 4px 20px rgba(238, 69, 64, 0.2);
-    padding: 1rem 0;
+    background-color: var(--black);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.2rem 0;
 }
 
 .navbar-brand {
-    font-size: 1.8rem;
-    color: var(--gold-yellow) !important;
+    font-size: 1.6rem;
+    color: var(--white) !important;
     letter-spacing: 1px;
     font-weight: 700;
     font-family: 'Calibri', sans-serif;
 }
 
 .navbar-custom .nav-link {
-    color: rgba(255, 255, 255, 0.95) !important;
-    margin-left: 2rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
+    color: var(--white) !important;
+    margin-left: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    transition: opacity 0.3s ease;
     font-family: 'Calibri', sans-serif;
 }
 
 .navbar-custom .nav-link:hover,
 .navbar-custom .nav-link.active {
-    color: var(--bright-yellow) !important;
+    opacity: 0.7;
 }
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, var(--light-bg) 0%, var(--white) 50%, #faf8f3 100%);
-    padding: 8rem 0;
-    border-bottom: 8px solid var(--gold-yellow);
-    position: relative;
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--dragon-red), transparent);
+    background: var(--white);
+    padding: 6rem 0;
+    border-bottom: 1px solid var(--light-gray);
 }
 
 .hero-section h1 {
-    color: var(--dark-dragon);
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.08);
+    color: var(--black);
     font-family: 'Calibri', sans-serif;
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     font-weight: 700;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
 }
 
 .hero-section .lead {
-    font-size: 1.3rem;
-    color: var(--text-secondary);
+    font-size: 1.2rem;
+    color: var(--medium-gray);
     font-weight: 300;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .btn-primary {
-    background-color: var(--dragon-red);
-    border-color: var(--dragon-red);
-    font-weight: 600;
-    padding: 0.85rem 2.5rem;
+    background-color: var(--black);
+    border-color: var(--black);
+    font-weight: 500;
+    padding: 0.75rem 2rem;
     transition: all 0.3s ease;
-    border-radius: 4px;
-    letter-spacing: 0.5px;
+    border-radius: 2px;
+    letter-spacing: 0.3px;
     font-family: 'Calibri', sans-serif;
 }
 
 .btn-primary:hover {
-    background-color: var(--dark-dragon);
-    border-color: var(--dark-dragon);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(238, 69, 64, 0.3);
+    background-color: var(--dark-gray);
+    border-color: var(--dark-gray);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-outline-primary {
-    color: var(--dragon-red);
-    border-color: var(--dragon-red);
-    font-weight: 600;
-    border-width: 2px;
+    color: var(--black);
+    border-color: var(--black);
+    font-weight: 500;
+    border-width: 1.5px;
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--dragon-red);
-    border-color: var(--dragon-red);
-    transform: translateY(-3px);
+    background-color: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+    transform: translateY(-2px);
 }
 
 /* Projects Section */
 .projects-section {
-    padding: 6rem 0;
+    padding: 5rem 0;
     background-color: var(--white);
 }
 
 .projects-section h2 {
-    color: var(--dark-dragon);
-    font-size: 3rem;
-    margin-bottom: 3.5rem;
+    color: var(--black);
+    font-size: 2.8rem;
+    margin-bottom: 3rem;
     font-family: 'Calibri', sans-serif;
     font-weight: 700;
     letter-spacing: -0.5px;
-    position: relative;
-    padding-bottom: 1rem;
-}
-
-.projects-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--dragon-red), var(--gold-yellow));
 }
 
 /* Project Card */
 .project-card {
     background: var(--white);
-    border-radius: 8px;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(238, 69, 64, 0.08);
-    transition: all 0.4s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--border-gray);
+    border: 1px solid var(--light-gray);
 }
 
 .project-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(238, 69, 64, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .project-header {
-    padding: 2.5rem 2rem;
+    padding: 2rem;
     color: var(--white);
     font-weight: 600;
+    background-color: var(--black);
 }
 
 .game-header {
-    background: linear-gradient(135deg, var(--dragon-red) 0%, var(--bright-yellow) 100%);
+    background-color: var(--dark-gray);
 }
 
 .paper-header {
-    background: linear-gradient(135deg, var(--dragon-red) 0%, #ff8c42 100%);
+    background-color: var(--black);
 }
 
 .project-header h3 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     margin: 0;
     font-family: 'Calibri', sans-serif;
-    letter-spacing: -0.5px;
 }
 
 .project-body {
@@ -200,7 +171,7 @@ a:hover {
 }
 
 .project-body p {
-    color: var(--text-secondary);
+    color: var(--medium-gray);
     margin-bottom: 1.5rem;
     flex-grow: 1;
     line-height: 1.8;
@@ -213,29 +184,29 @@ a:hover {
 }
 
 .project-features li {
-    padding: 0.6rem 0;
-    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    color: var(--medium-gray);
     display: flex;
     align-items: center;
 }
 
 .project-features li:before {
-    content: "◆";
-    color: var(--gold-yellow);
+    content: "•";
+    color: var(--black);
     font-weight: bold;
     margin-right: 0.75rem;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 /* About Section */
 .about-section {
-    padding: 6rem 0;
-    background: linear-gradient(135deg, var(--light-bg) 0%, var(--white) 100%);
+    padding: 5rem 0;
+    background: var(--light-gray);
 }
 
 .about-section h2 {
-    color: var(--dark-dragon);
-    font-size: 2.8rem;
+    color: var(--black);
+    font-size: 2.5rem;
     font-family: 'Calibri', sans-serif;
     font-weight: 700;
     letter-spacing: -0.5px;
@@ -243,65 +214,53 @@ a:hover {
 }
 
 .about-section p {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     line-height: 1.9;
-    color: var(--text-secondary);
+    color: var(--medium-gray);
 }
 
 .about-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
 }
 
 .stat-box {
     background: var(--white);
-    padding: 2.5rem;
-    border-radius: 8px;
+    padding: 2rem;
+    border-radius: 0;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(238, 69, 64, 0.06);
-    border: 1px solid var(--border-gray);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--light-gray);
     transition: all 0.3s ease;
 }
 
 .stat-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(238, 69, 64, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .stat-box h4 {
-    font-size: 2.8rem;
-    color: var(--dragon-red);
+    font-size: 2.5rem;
+    color: var(--black);
     margin-bottom: 0.5rem;
     font-family: 'Calibri', sans-serif;
     font-weight: 700;
 }
 
 .stat-box p {
-    color: var(--text-secondary);
+    color: var(--medium-gray);
     margin: 0;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
 }
 
 /* CTA Section */
 .cta-section {
-    background: linear-gradient(135deg, var(--dragon-red) 0%, #ff8c42 50%, var(--dark-dragon) 100%);
-    padding: 5rem 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta-section::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
-    border-radius: 50%;
+    background: var(--black);
+    color: var(--white);
+    padding: 4rem 0;
 }
 
 .cta-section h2 {
@@ -309,82 +268,78 @@ a:hover {
     margin-bottom: 1.5rem;
     font-family: 'Calibri', sans-serif;
     font-weight: 700;
-    position: relative;
-    z-index: 1;
 }
 
 .cta-section .lead {
-    font-size: 1.2rem;
-    position: relative;
-    z-index: 1;
+    font-size: 1.15rem;
+    font-weight: 300;
 }
 
 .btn-outline-light {
-    font-weight: 600;
-    padding: 0.85rem 2.5rem;
-    border-width: 2px;
-    letter-spacing: 0.5px;
+    font-weight: 500;
+    padding: 0.75rem 2rem;
+    border-width: 1.5px;
+    border-color: var(--white);
+    color: var(--white);
 }
 
 .btn-outline-light:hover {
-    background-color: var(--bright-yellow);
-    color: var(--dark-dragon);
-    border-color: var(--bright-yellow);
+    background-color: var(--white);
+    color: var(--black);
+    border-color: var(--white);
 }
 
 /* Footer */
 .footer {
-    background: linear-gradient(135deg, var(--text-primary) 0%, #0a0a0a 100%);
+    background-color: var(--black);
     color: var(--white);
     margin-top: 0;
-    padding: 3rem 0;
-    border-top: 3px solid var(--gold-yellow);
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--dark-gray);
 }
 
 .footer p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     letter-spacing: 0.3px;
 }
 
 .footer-link {
-    color: var(--bright-yellow);
-    transition: all 0.3s ease;
-    font-weight: 500;
+    color: var(--white);
+    transition: opacity 0.3s ease;
+    font-weight: 400;
 }
 
 .footer-link:hover {
-    color: var(--gold-yellow);
-    text-decoration: underline;
+    opacity: 0.7;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero-section {
-        padding: 4rem 0;
+        padding: 3rem 0;
     }
 
     .hero-section h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 
     .projects-section h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .about-stats {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
     }
 
     .navbar-custom .nav-link {
-        margin-left: 1rem;
-        padding: 0.5rem 0;
+        margin-left: 1.5rem;
     }
 }
 
 @media (max-width: 576px) {
     .hero-section h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
     .hero-section .lead {
@@ -406,7 +361,7 @@ a:hover {
     }
 
     .navbar-custom .nav-link {
-        margin-left: 0;
+        margin-left: 1rem;
     }
 }
 
@@ -420,18 +375,18 @@ a:hover {
 }
 
 .container-placeholder h1 {
-    color: var(--dark-dragon);
+    color: var(--black);
     margin-bottom: 1rem;
     font-family: 'Calibri', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2.3rem;
 }
 
 .container-placeholder p {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+    color: var(--medium-gray);
+    font-size: 1rem;
 }
 
-/* Typography enhancements */
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Calibri', sans-serif;
 }
