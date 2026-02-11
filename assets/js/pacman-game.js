@@ -225,8 +225,8 @@ class PacManGame {
                     else if (dir === 2) nextX--;
                     else if (dir === 3) nextY--;
                     
-                    nextX = (nextX + this.COLS) % this.COLS;
-                    nextY = (nextY + this.ROWS) % this.ROWS;
+                    // Check bounds WITHOUT wrapping for pathfinding
+                    if (nextX < 0 || nextX >= this.COLS || nextY < 0 || nextY >= this.ROWS) continue;
                     
                     const newDx = this.pacman.x - nextX;
                     const newDy = this.pacman.y - nextY;
@@ -251,13 +251,25 @@ class PacManGame {
             if (possibleDirs.length > 0) {
                 ghost.dir = possibleDirs[0];
                 
-                if (ghost.dir === 0) ghost.x++;
-                else if (ghost.dir === 1) ghost.y++;
-                else if (ghost.dir === 2) ghost.x--;
-                else if (ghost.dir === 3) ghost.y--;
+                let nextX = ghost.x, nextY = ghost.y;
+                if (ghost.dir === 0) nextX++;
+                else if (ghost.dir === 1) nextY++;
+                else if (ghost.dir === 2) nextX--;
+                else if (ghost.dir === 3) nextY--;
                 
-                ghost.x = (ghost.x + this.COLS) % this.COLS;
-                ghost.y = (ghost.y + this.ROWS) % this.ROWS;
+                // Don't allow overlap with other ghosts
+                let occupiedByGhost = false;
+                for (let other of this.ghosts) {
+                    if (other !== ghost && other.x === nextX && other.y === nextY) {
+                        occupiedByGhost = true;
+                        break;
+                    }
+                }
+                
+                if (!occupiedByGhost) {
+                    ghost.x = nextX;
+                    ghost.y = nextY;
+                }
             }
         }
     }
