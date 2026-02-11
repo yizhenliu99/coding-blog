@@ -238,6 +238,8 @@ class PacManGame {
             }
         }
     }
+    
+    isWall(x, y) {
         if (x < 0 || x >= this.COLS || y < 0 || y >= this.ROWS) return false;
         return this.maze[y][x] === 1;
     }
