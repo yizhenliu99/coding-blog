@@ -632,10 +632,17 @@ class PacManGame {
 let currentGame = null;
 
 function startGame(difficulty) {
+    console.log('Starting game with difficulty:', difficulty);
     if (currentGame) currentGame.stop();
-    currentGame = new PacManGame('gameCanvas', difficulty);
-    currentGame.start();
-    window.game = currentGame;
+    try {
+        currentGame = new PacManGame('gameCanvas', difficulty);
+        console.log('Game created');
+        currentGame.start();
+        console.log('Game started');
+        window.game = currentGame;
+    } catch (e) {
+        console.error('Error starting game:', e);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
