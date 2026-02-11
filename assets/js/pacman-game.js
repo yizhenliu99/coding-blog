@@ -1,27 +1,37 @@
-// Pac-Man Game - Problem 2.2: Ghosts and Collision
+// Pac-Man Game - Problem 2.2: Ghosts with Difficulty
 class Ghost {
-    constructor(x, y, color) {
+    constructor(x, y, color, difficulty) {
         this.x = x;
         this.y = y;
         this.startX = x;
         this.startY = y;
         this.color = color;
-        this.dir = 0;
+        this.dir = Math.floor(Math.random() * 4);
         this.moveCounter = 0;
-        this.moveFrequency = 2; // Move every 2 game ticks
+        
+        // Adjust speed by difficulty
+        if (difficulty === 'easy') this.moveFrequency = 3;
+        else if (difficulty === 'medium') this.moveFrequency = 2;
+        else this.moveFrequency = 1;
+        
+        this.escapeMode = true; // Try to escape ghost house first
+        this.escapeCounter = 0;
     }
     
     reset() {
         this.x = this.startX;
         this.y = this.startY;
-        this.dir = 0;
+        this.dir = Math.floor(Math.random() * 4);
+        this.escapeMode = true;
+        this.escapeCounter = 0;
     }
 }
 
 class PacManGame {
-    constructor(canvasId) {
+    constructor(canvasId, difficulty = 'medium') {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
+        this.difficulty = difficulty;
         
         // Game constants
         this.TILE_SIZE = 20;
@@ -64,17 +74,12 @@ class PacManGame {
             x: 9,
             y: 15,
             dir: 0,
-            nextDir: 0,
-            speed: 1
+            nextDir: 0
         };
         
-        // Ghosts - spawned in ghost house
-        this.ghosts = [
-            new Ghost(9, 8, '#FF0000'),    // Red ghost
-            new Ghost(8, 9, '#FFB6C1'),    // Pink ghost
-            new Ghost(9, 9, '#00FFFF'),    // Cyan ghost
-            new Ghost(10, 9, '#FFB347'),   // Orange ghost
-        ];
+        // Create ghosts based on difficulty
+        this.ghosts = [];
+        this.createGhosts();
         
         // Count pellets
         this.countPellets();
@@ -87,6 +92,24 @@ class PacManGame {
         // Game loop
         this.gameLoopId = null;
         this.frameCount = 0;
+    }
+    
+    createGhosts() {
+        const ghostConfigs = [
+            { x: 9, y: 8, color: '#FF0000' },
+            { x: 8, y: 9, color: '#FFB6C1' },
+            { x: 9, y: 9, color: '#00FFFF' },
+            { x: 10, y: 9, color: '#FFB347' }
+        ];
+        
+        let ghostCount = 1;
+        if (this.difficulty === 'medium') ghostCount = 2;
+        else if (this.difficulty === 'hard') ghostCount = 4;
+        
+        this.ghosts = [];
+        for (let i = 0; i < ghostCount; i++) {
+            this.ghosts.push(new Ghost(ghostConfigs[i].x, ghostConfigs[i].y, ghostConfigs[i].color, this.difficulty));
+        }
     }
     
     countPellets() {
@@ -128,12 +151,10 @@ class PacManGame {
     movePacman() {
         if (!this.gameRunning) return;
         
-        // Try next direction first
         if (this.canMove(this.pacman.x, this.pacman.y, this.pacman.nextDir)) {
             this.pacman.dir = this.pacman.nextDir;
         }
         
-        // Move in current direction if possible
         if (this.canMove(this.pacman.x, this.pacman.y, this.pacman.dir)) {
             if (this.pacman.dir === 0) this.pacman.x++;
             else if (this.pacman.dir === 1) this.pacman.y++;
@@ -166,28 +187,37 @@ class PacManGame {
             if (ghost.moveCounter < ghost.moveFrequency) continue;
             ghost.moveCounter = 0;
             
-            // Simple AI: Chase Pac-Man
-            const dx = this.pacman.x - ghost.x;
-            const dy = this.pacman.y - ghost.y;
-            
-            // Pick direction based on distance
             let possibleDirs = [];
             
-            if (Math.abs(dx) > Math.abs(dy)) {
-                // Prioritize horizontal movement
-                if (dx > 0 && this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0); // Right
-                if (dx < 0 && this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2); // Left
-                if (dy > 0 && this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1); // Down
-                if (dy < 0 && this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3); // Up
+            if (ghost.escapeMode) {
+                // Try to escape ghost house
+                ghost.escapeCounter++;
+                if (ghost.escapeCounter > 10) {
+                    ghost.escapeMode = false; // Start chasing after 10 moves
+                }
+                
+                // Try up first to escape
+                for (let dir = 0; dir < 4; dir++) {
+                    if (this.canMove(ghost.x, ghost.y, dir)) possibleDirs.push(dir);
+                }
             } else {
-                // Prioritize vertical movement
-                if (dy > 0 && this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1); // Down
-                if (dy < 0 && this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3); // Up
-                if (dx > 0 && this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0); // Right
-                if (dx < 0 && this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2); // Left
+                // Chase Pac-Man
+                const dx = this.pacman.x - ghost.x;
+                const dy = this.pacman.y - ghost.y;
+                
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    if (dx > 0 && this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0);
+                    if (dx < 0 && this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2);
+                    if (dy > 0 && this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1);
+                    if (dy < 0 && this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3);
+                } else {
+                    if (dy > 0 && this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1);
+                    if (dy < 0 && this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3);
+                    if (dx > 0 && this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0);
+                    if (dx < 0 && this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2);
+                }
             }
             
-            // If no preferred direction, pick any valid direction
             if (possibleDirs.length === 0) {
                 for (let dir = 0; dir < 4; dir++) {
                     if (this.canMove(ghost.x, ghost.y, dir)) possibleDirs.push(dir);
@@ -209,7 +239,6 @@ class PacManGame {
     }
     
     checkCollisions() {
-        // Check Pac-Man vs Ghosts
         for (let ghost of this.ghosts) {
             if (this.pacman.x === ghost.x && this.pacman.y === ghost.y) {
                 this.lives--;
@@ -218,9 +247,7 @@ class PacManGame {
                 if (this.lives <= 0) {
                     this.gameRunning = false;
                     this.gameOver = true;
-                    console.log('Game Over!');
                 } else {
-                    // Reset positions
                     this.pacman.x = 9;
                     this.pacman.y = 15;
                     for (let g of this.ghosts) {
@@ -285,17 +312,7 @@ class PacManGame {
         this.ctx.strokeStyle = '#000000';
         this.ctx.lineWidth = 1.5;
         this.ctx.beginPath();
-        
-        if (this.pacman.dir === 0) {
-            this.ctx.arc(x + radius * 0.2, y + radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
-        } else if (this.pacman.dir === 1) {
-            this.ctx.arc(x + radius * 0.2, y + radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
-        } else if (this.pacman.dir === 2) {
-            this.ctx.arc(x - radius * 0.2, y + radius * 0.2, 2, Math.PI - Math.PI / 4, Math.PI + Math.PI / 4);
-        } else if (this.pacman.dir === 3) {
-            this.ctx.arc(x + radius * 0.2, y - radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
-        }
-        
+        this.ctx.arc(x + radius * 0.2, y + radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
         this.ctx.stroke();
     }
     
@@ -305,7 +322,6 @@ class PacManGame {
             const y = ghost.y * this.TILE_SIZE;
             const size = this.TILE_SIZE - 2;
             
-            // Ghost body (rounded rectangle)
             this.ctx.fillStyle = ghost.color;
             this.ctx.beginPath();
             this.ctx.moveTo(x + 2, y + size / 2);
@@ -316,7 +332,6 @@ class PacManGame {
             this.ctx.lineTo(x + 2, y + size);
             this.ctx.fill();
             
-            // Ghost eyes
             this.ctx.fillStyle = '#FFFFFF';
             this.ctx.fillRect(x + 4, y + 5, 3, 3);
             this.ctx.fillRect(x + size - 7, y + 5, 3, 3);
@@ -331,6 +346,7 @@ class PacManGame {
         document.getElementById('scoreValue').textContent = this.score;
         document.getElementById('livesValue').textContent = this.lives;
         document.getElementById('pelletsValue').textContent = this.pelletsRemaining;
+        document.getElementById('difficultyDisplay').textContent = this.difficulty.toUpperCase() + ' (' + this.ghosts.length + ' ghosts)';
         
         if (this.gameOver) {
             document.getElementById('gameStatus').textContent = 'Game Over! Refresh to play again.';
@@ -366,8 +382,16 @@ class PacManGame {
     }
 }
 
+// Global game instance
+let currentGame = null;
+
+function startGame(difficulty) {
+    if (currentGame) currentGame.stop();
+    currentGame = new PacManGame('gameCanvas', difficulty);
+    currentGame.start();
+    window.game = currentGame;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const game = new PacManGame('gameCanvas');
-    game.start();
-    window.game = game;
+    startGame('medium');
 });
