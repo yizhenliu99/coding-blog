@@ -1,0 +1,318 @@
+/* Root Colors - Valentine's Theme */
+:root {
+    --primary-color: #e83e8c;
+    --primary-dark: #c2185b;
+    --secondary-color: #ff6b9d;
+    --accent-color: #ffc0cb;
+    --light-bg: #fff5f8;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+}
+
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* Navigation */
+.navbar-custom {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: white !important;
+    letter-spacing: 0.5px;
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin-left: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link.active {
+    color: white !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--light-bg) 0%, #fff 100%);
+    padding: 6rem 0;
+    border-bottom: 3px solid var(--accent-color);
+}
+
+.hero-section h1 {
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 62, 140, 0.3);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Projects Section */
+.projects-section {
+    padding: 4rem 0;
+    background-color: #ffffff;
+}
+
+.projects-section h2 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+/* Project Card */
+.project-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(232, 62, 140, 0.2);
+}
+
+.project-header {
+    padding: 1.5rem;
+    color: white;
+    font-weight: 600;
+}
+
+.game-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.paper-header {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.project-header h3 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.project-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-body p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.project-features {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.project-features li {
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+}
+
+.project-features li:before {
+    content: "✓";
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-right: 0.75rem;
+}
+
+/* About Section */
+.about-section {
+    padding: 4rem 0;
+}
+
+.about-section h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.about-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.stat-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-box h4 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-box p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    padding: 4rem 0;
+}
+
+.cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.btn-outline-light {
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+}
+
+.btn-outline-light:hover {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+/* Footer */
+.footer {
+    background-color: #2c3e50;
+    color: white;
+    margin-top: 3rem;
+}
+
+.footer-link {
+    color: var(--accent-color);
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .projects-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .about-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .navbar-custom .nav-link {
+        margin-left: 0;
+        padding: 0.5rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero-buttons .btn {
+        margin-bottom: 0.5rem;
+        margin-right: 0 !important;
+    }
+}
+
+/* Placeholder styles for game and arxiv pages */
+.container-placeholder {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.container-placeholder h1 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.container-placeholder p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
