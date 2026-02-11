@@ -97,10 +97,10 @@ class PacManGame {
     
     createGhosts() {
         const ghostConfigs = [
-            { x: 7, y: 8, color: '#FF0000' },      // Red - left
-            { x: 11, y: 8, color: '#FFB6C1' },     // Pink - right
-            { x: 8, y: 10, color: '#00FFFF' },     // Cyan - bottom left
-            { x: 10, y: 10, color: '#FFB347' }     // Orange - bottom right
+            { x: 8, y: 9, color: '#FF0000' },      // Red - top left
+            { x: 11, y: 9, color: '#FFB6C1' },     // Pink - top right
+            { x: 8, y: 12, color: '#00FFFF' },     // Cyan - bottom left
+            { x: 11, y: 12, color: '#FFB347' }     // Orange - bottom right
         ];
         
         let ghostCount = 1;
