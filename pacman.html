@@ -57,10 +57,36 @@
             color: #000;
         }
         
-        .game-info {
-            margin-top: 2rem;
+        .game-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 4px;
             text-align: center;
-            color: #666;
+            font-weight: 600;
+            color: #000;
+        }
+        
+        .ghost-legend {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .ghost-item {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+        
+        .ghost-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 0.5rem;
+            border-radius: 2px;
         }
         
         .controls {
@@ -145,6 +171,28 @@
                     <span class="panel-label">Pellets Left:</span>
                     <span class="panel-value" id="pelletsValue">0</span>
                 </div>
+                
+                <div class="game-status" id="gameStatus">Playing...</div>
+                
+                <div class="ghost-legend">
+                    <strong>Ghosts:</strong>
+                    <div class="ghost-item">
+                        <div class="ghost-color" style="background-color: #FF0000;"></div>
+                        <span>Red Ghost</span>
+                    </div>
+                    <div class="ghost-item">
+                        <div class="ghost-color" style="background-color: #FFB6C1;"></div>
+                        <span>Pink Ghost</span>
+                    </div>
+                    <div class="ghost-item">
+                        <div class="ghost-color" style="background-color: #00FFFF;"></div>
+                        <span>Cyan Ghost</span>
+                    </div>
+                    <div class="ghost-item">
+                        <div class="ghost-color" style="background-color: #FFB347;"></div>
+                        <span>Orange Ghost</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -153,7 +201,7 @@
             <h5>How to Play</h5>
             <p><strong>Arrow Keys</strong> or <strong>WASD</strong> to move Pac-Man</p>
             <p>Eat all the black pellets to complete the level</p>
-            <p>Avoid the ghosts coming in Problem 2.2!</p>
+            <p>Avoid the 4 ghosts - lose a life if you touch one!</p>
         </div>
 
         <!-- Back Button -->
