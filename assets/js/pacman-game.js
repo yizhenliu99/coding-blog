@@ -513,7 +513,15 @@ class PacManGame {
         document.getElementById('scoreValue').textContent = this.score;
         document.getElementById('livesValue').textContent = this.lives;
         document.getElementById('pelletsValue').textContent = this.pelletsRemaining;
-        document.getElementById('difficultyDisplay').textContent = this.difficulty.toUpperCase() + ' (' + this.ghosts.length + ' ghosts)';
+        
+        // Show difficulty only after game starts
+        const diffDisplay = document.getElementById('difficultyDisplay');
+        if (this.gameStarted) {
+            diffDisplay.textContent = this.difficulty.toUpperCase() + ' (' + this.ghosts.length + ' ghosts)';
+            diffDisplay.style.display = 'inline';
+        } else {
+            diffDisplay.style.display = 'none';
+        }
         
         // Update power-up display
         const powerUpDisplay = document.getElementById('powerUpDisplay');
@@ -527,7 +535,7 @@ class PacManGame {
         
         if (this.gameOver) {
             document.getElementById('gameStatus').textContent = 'Game Over! Refresh to play again.';
-        } else if (!this.gameRunning && !this.gameOver) {
+        } else if (!this.gameRunning && this.gameStarted && !this.gameOver) {
             document.getElementById('gameStatus').textContent = 'Level Complete! Refresh to play again.';
         }
     }
@@ -629,5 +637,5 @@ function startGame(difficulty) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    startGame('medium');
+    // Don't auto-start - wait for user to select difficulty
 });
