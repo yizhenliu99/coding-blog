@@ -39,12 +39,23 @@ class PacManGame {
         this.ROWS = this.canvas.height / this.TILE_SIZE;
         
         // Game state
-        this.gameRunning = false;  // Don't start moving until player presses a key
-        this.gameStarted = false;  // Track if first key press occurred
+        this.gameRunning = false;
+        this.gameStarted = false;
         this.gameOver = false;
         this.score = 0;
         this.lives = 3;
         this.pelletsRemaining = 0;
+        
+        // Power-up system
+        this.poweredUp = false;
+        this.powerUpTimer = 0;
+        this.powerUpDuration = this.getPowerUpDuration();
+        this.rose = null;
+        this.roseSpawnCounter = 0;
+        this.roseRespawnTime = 0;
+        
+        // Heart projectiles
+        this.hearts = [];
         
         // Maze (0 = empty, 1 = wall, 2 = pellet)
         this.maze = [
@@ -121,6 +132,25 @@ class PacManGame {
         }
     }
     
+    getPowerUpDuration() {
+        if (this.difficulty === 'easy') return 5000; // 5 seconds
+        else if (this.difficulty === 'medium') return 4000; // 4 seconds
+        else return 3000; // 3 seconds
+    }
+    
+    spawnRose() {
+        if (this.rose) return; // Rose already exists
+        
+        let x, y, valid;
+        do {
+            x = Math.floor(Math.random() * this.COLS);
+            y = Math.floor(Math.random() * this.ROWS);
+            valid = this.maze[y][x] === 0 || this.maze[y][x] === 2; // Empty or pellet space
+        } while (!valid);
+        
+        this.rose = { x, y };
+    }
+    
     handleInput() {
         // Start game on first key press
         if (!this.gameStarted && Object.keys(this.keys).some(k => this.keys[k])) {
@@ -132,9 +162,80 @@ class PacManGame {
         if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) this.pacman.nextDir = 1;
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.pacman.nextDir = 2;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) this.pacman.nextDir = 3;
+        
+        // Shoot hearts when powered up and Space is pressed
+        if (this.poweredUp && (this.keys[' '] || this.keys['Spacebar'])) {
+            this.shootHeart();
+        }
     }
     
-    isWall(x, y) {
+    shootHeart() {
+        const dx = [1, 0, -1, 0];
+        const dy = [0, 1, 0, -1];
+        
+        const heart = {
+            x: this.pacman.x + dx[this.pacman.dir],
+            y: this.pacman.y + dy[this.pacman.dir],
+            dir: this.pacman.dir
+        };
+        
+        this.hearts.push(heart);
+    }
+    
+    moveHearts() {
+        const dx = [1, 0, -1, 0];
+        const dy = [0, 1, 0, -1];
+        
+        for (let i = this.hearts.length - 1; i >= 0; i--) {
+            const heart = this.hearts[i];
+            
+            // Move heart
+            heart.x += dx[heart.dir];
+            heart.y += dy[heart.dir];
+            
+            // Remove if hits wall or goes out of bounds
+            if (heart.x < 0 || heart.x >= this.COLS || heart.y < 0 || heart.y >= this.ROWS ||
+                this.isWall(heart.x, heart.y)) {
+                this.hearts.splice(i, 1);
+                continue;
+            }
+            
+            // Check collision with ghosts
+            for (let ghost of this.ghosts) {
+                if (ghost.alive && heart.x === ghost.x && heart.y === ghost.y) {
+                    ghost.alive = false;
+                    this.hearts.splice(i, 1);
+                    this.score += 50;
+                    break;
+                }
+            }
+        }
+    }
+    
+    updatePowerUp() {
+        if (!this.poweredUp) {
+            // Try to spawn rose
+            this.roseSpawnCounter++;
+            if (!this.rose && this.roseSpawnCounter > this.roseRespawnTime) {
+                this.spawnRose();
+                this.roseRespawnTime = Math.floor(Math.random() * 100) + 50; // 0.5-1 seconds
+                this.roseSpawnCounter = 0;
+            }
+        } else {
+            // Decrease power-up timer
+            this.powerUpTimer -= 100;
+            if (this.powerUpTimer <= 0) {
+                this.poweredUp = false;
+                this.powerUpTimer = 0;
+                // Respawn dead ghosts
+                for (let ghost of this.ghosts) {
+                    if (!ghost.alive) {
+                        ghost.reset();
+                    }
+                }
+            }
+        }
+    }
         if (x < 0 || x >= this.COLS || y < 0 || y >= this.ROWS) return false;
         return this.maze[y][x] === 1;
     }
@@ -187,10 +288,22 @@ class PacManGame {
         }
     }
     
+    eatRose() {
+        if (this.rose && this.pacman.x === this.rose.x && this.pacman.y === this.rose.y) {
+            this.poweredUp = true;
+            this.powerUpTimer = this.getPowerUpDuration();
+            this.rose = null;
+            this.score += 100;
+            this.updateUI();
+        }
+    }
+    
     moveGhosts() {
         if (!this.gameRunning) return;
         
         for (let ghost of this.ghosts) {
+            if (!ghost.alive) continue; // Skip dead ghosts
+            
             ghost.moveCounter++;
             if (ghost.moveCounter < ghost.moveFrequency) continue;
             ghost.moveCounter = 0;
@@ -259,7 +372,7 @@ class PacManGame {
                 // Don't allow overlap with other ghosts
                 let occupiedByGhost = false;
                 for (let other of this.ghosts) {
-                    if (other !== ghost && other.x === nextX && other.y === nextY) {
+                    if (other !== ghost && other.alive && other.x === nextX && other.y === nextY) {
                         occupiedByGhost = true;
                         break;
                     }
@@ -277,6 +390,8 @@ class PacManGame {
         if (this.lives <= 0) return;  // Don't check collisions if already dead
         
         for (let ghost of this.ghosts) {
+            if (!ghost.alive) continue; // Can't collide with dead ghosts
+            
             if (this.pacman.x === ghost.x && this.pacman.y === ghost.y) {
                 this.lives--;
                 this.updateUI();
@@ -301,8 +416,11 @@ class PacManGame {
         this.handleInput();
         this.movePacman();
         this.eatPellet();
+        this.eatRose();
         this.moveGhosts();
+        this.moveHearts();
         this.checkCollisions();
+        this.updatePowerUp();
     }
     
     drawMaze() {
@@ -332,10 +450,19 @@ class PacManGame {
         const y = this.pacman.y * this.TILE_SIZE + this.TILE_SIZE / 2;
         const radius = this.TILE_SIZE / 2 - 2;
         
-        this.ctx.fillStyle = '#FFFF00';
+        // Change color if powered up
+        this.ctx.fillStyle = this.poweredUp ? '#FFD700' : '#FFFF00';
         this.ctx.beginPath();
         this.ctx.arc(x, y, radius, 0, Math.PI * 2);
         this.ctx.fill();
+        
+        // Add glow effect if powered
+        if (this.poweredUp) {
+            this.ctx.strokeStyle = '#FF69B4';
+            this.ctx.lineWidth = 3;
+            this.ctx.stroke();
+        }
+        
         this.ctx.strokeStyle = '#000000';
         this.ctx.lineWidth = 1;
         this.ctx.stroke();
@@ -356,6 +483,8 @@ class PacManGame {
     
     drawGhosts() {
         for (let ghost of this.ghosts) {
+            if (!ghost.alive) continue; // Don't draw dead ghosts
+            
             const x = ghost.x * this.TILE_SIZE;
             const y = ghost.y * this.TILE_SIZE;
             const size = this.TILE_SIZE - 2;
@@ -386,6 +515,16 @@ class PacManGame {
         document.getElementById('pelletsValue').textContent = this.pelletsRemaining;
         document.getElementById('difficultyDisplay').textContent = this.difficulty.toUpperCase() + ' (' + this.ghosts.length + ' ghosts)';
         
+        // Update power-up display
+        const powerUpDisplay = document.getElementById('powerUpDisplay');
+        if (this.poweredUp) {
+            const remaining = Math.ceil(this.powerUpTimer / 1000);
+            powerUpDisplay.textContent = remaining + 's';
+            powerUpDisplay.style.display = 'inline';
+        } else {
+            powerUpDisplay.style.display = 'none';
+        }
+        
         if (this.gameOver) {
             document.getElementById('gameStatus').textContent = 'Game Over! Refresh to play again.';
         } else if (!this.gameRunning && !this.gameOver) {
@@ -398,6 +537,28 @@ class PacManGame {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
         this.drawMaze();
+        
+        // Draw rose
+        if (this.rose) {
+            const x = this.rose.x * this.TILE_SIZE + this.TILE_SIZE / 2;
+            const y = this.rose.y * this.TILE_SIZE + this.TILE_SIZE / 2;
+            this.ctx.fillStyle = '#FF1493';
+            this.ctx.font = 'bold 14px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('🌹', x, y);
+        }
+        
+        // Draw hearts
+        for (let heart of this.hearts) {
+            const x = heart.x * this.TILE_SIZE + this.TILE_SIZE / 2;
+            const y = heart.y * this.TILE_SIZE + this.TILE_SIZE / 2;
+            this.ctx.font = 'bold 12px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('❤️', x, y);
+        }
+        
         this.drawGhosts();
         this.drawPacman();
         
