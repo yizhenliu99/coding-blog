@@ -39,7 +39,8 @@ class PacManGame {
         this.ROWS = this.canvas.height / this.TILE_SIZE;
         
         // Game state
-        this.gameRunning = true;
+        this.gameRunning = false;  // Don't start moving until player presses a key
+        this.gameStarted = false;  // Track if first key press occurred
         this.gameOver = false;
         this.score = 0;
         this.lives = 3;
@@ -96,10 +97,10 @@ class PacManGame {
     
     createGhosts() {
         const ghostConfigs = [
-            { x: 9, y: 8, color: '#FF0000' },
-            { x: 8, y: 9, color: '#FFB6C1' },
-            { x: 9, y: 9, color: '#00FFFF' },
-            { x: 10, y: 9, color: '#FFB347' }
+            { x: 7, y: 8, color: '#FF0000' },      // Red - left
+            { x: 11, y: 8, color: '#FFB6C1' },     // Pink - right
+            { x: 8, y: 10, color: '#00FFFF' },     // Cyan - bottom left
+            { x: 10, y: 10, color: '#FFB347' }     // Orange - bottom right
         ];
         
         let ghostCount = 1;
@@ -122,6 +123,12 @@ class PacManGame {
     }
     
     handleInput() {
+        // Start game on first key press
+        if (!this.gameStarted && Object.keys(this.keys).some(k => this.keys[k])) {
+            this.gameStarted = true;
+            this.gameRunning = true;
+        }
+        
         if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) this.pacman.nextDir = 0;
         if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) this.pacman.nextDir = 1;
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.pacman.nextDir = 2;
@@ -182,6 +189,8 @@ class PacManGame {
     }
     
     moveGhosts() {
+        if (!this.gameRunning) return;
+        
         for (let ghost of this.ghosts) {
             ghost.moveCounter++;
             if (ghost.moveCounter < ghost.moveFrequency) continue;
@@ -190,34 +199,49 @@ class PacManGame {
             let possibleDirs = [];
             
             if (ghost.escapeMode) {
-                // Try to escape ghost house
+                // Try to escape ghost house - prefer up then left/right
                 ghost.escapeCounter++;
-                if (ghost.escapeCounter > 10) {
-                    ghost.escapeMode = false; // Start chasing after 10 moves
+                if (ghost.escapeCounter > 15) {
+                    ghost.escapeMode = false; // Start chasing after 15 moves
                 }
                 
-                // Try up first to escape
-                for (let dir = 0; dir < 4; dir++) {
-                    if (this.canMove(ghost.x, ghost.y, dir)) possibleDirs.push(dir);
-                }
+                // Priority: up (3), then sideways (0, 2), then down (1)
+                if (this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3);
+                if (this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0);
+                if (this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2);
+                if (this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1);
             } else {
-                // Chase Pac-Man
+                // Chase Pac-Man using A* style scoring
                 const dx = this.pacman.x - ghost.x;
                 const dy = this.pacman.y - ghost.y;
                 
-                if (Math.abs(dx) > Math.abs(dy)) {
-                    if (dx > 0 && this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0);
-                    if (dx < 0 && this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2);
-                    if (dy > 0 && this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1);
-                    if (dy < 0 && this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3);
-                } else {
-                    if (dy > 0 && this.canMove(ghost.x, ghost.y, 1)) possibleDirs.push(1);
-                    if (dy < 0 && this.canMove(ghost.x, ghost.y, 3)) possibleDirs.push(3);
-                    if (dx > 0 && this.canMove(ghost.x, ghost.y, 0)) possibleDirs.push(0);
-                    if (dx < 0 && this.canMove(ghost.x, ghost.y, 2)) possibleDirs.push(2);
+                let dirScores = [];
+                for (let dir = 0; dir < 4; dir++) {
+                    if (!this.canMove(ghost.x, ghost.y, dir)) continue;
+                    
+                    let nextX = ghost.x, nextY = ghost.y;
+                    if (dir === 0) nextX++;
+                    else if (dir === 1) nextY++;
+                    else if (dir === 2) nextX--;
+                    else if (dir === 3) nextY--;
+                    
+                    nextX = (nextX + this.COLS) % this.COLS;
+                    nextY = (nextY + this.ROWS) % this.ROWS;
+                    
+                    const newDx = this.pacman.x - nextX;
+                    const newDy = this.pacman.y - nextY;
+                    const distance = Math.abs(newDx) + Math.abs(newDy);
+                    
+                    dirScores.push({ dir, distance });
+                }
+                
+                if (dirScores.length > 0) {
+                    dirScores.sort((a, b) => a.distance - b.distance);
+                    possibleDirs.push(dirScores[0].dir);
                 }
             }
             
+            // Fallback: any valid direction
             if (possibleDirs.length === 0) {
                 for (let dir = 0; dir < 4; dir++) {
                     if (this.canMove(ghost.x, ghost.y, dir)) possibleDirs.push(dir);
@@ -239,6 +263,8 @@ class PacManGame {
     }
     
     checkCollisions() {
+        if (this.lives <= 0) return;  // Don't check collisions if already dead
+        
         for (let ghost of this.ghosts) {
             if (this.pacman.x === ghost.x && this.pacman.y === ghost.y) {
                 this.lives--;
@@ -247,6 +273,7 @@ class PacManGame {
                 if (this.lives <= 0) {
                     this.gameRunning = false;
                     this.gameOver = true;
+                    document.getElementById('gameStatus').textContent = 'Game Over! Refresh to play again.';
                 } else {
                     this.pacman.x = 9;
                     this.pacman.y = 15;
@@ -362,6 +389,42 @@ class PacManGame {
         this.drawMaze();
         this.drawGhosts();
         this.drawPacman();
+        
+        // Draw "Game Over" overlay if game is over
+        if (this.gameOver) {
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            this.ctx.fillStyle = '#FFFFFF';
+            this.ctx.font = 'bold 32px Calibri';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2 - 20);
+            
+            this.ctx.font = '16px Calibri';
+            this.ctx.fillText('Refresh page to play again', this.canvas.width / 2, this.canvas.height / 2 + 20);
+        } else if (!this.gameRunning && this.gameStarted) {
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            this.ctx.fillStyle = '#FFFFFF';
+            this.ctx.font = 'bold 28px Calibri';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('LEVEL COMPLETE!', this.canvas.width / 2, this.canvas.height / 2 - 20);
+            
+            this.ctx.font = '16px Calibri';
+            this.ctx.fillText('Refresh page to play again', this.canvas.width / 2, this.canvas.height / 2 + 20);
+        } else if (!this.gameRunning && !this.gameStarted) {
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            this.ctx.fillStyle = '#000000';
+            this.ctx.font = 'bold 20px Calibri';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('Press any key to start', this.canvas.width / 2, this.canvas.height / 2);
+        }
     }
     
     gameLoop() {
@@ -371,6 +434,7 @@ class PacManGame {
     
     start() {
         this.updateUI();
+        document.getElementById('gameStatus').textContent = 'Press any key to start';
         this.gameLoopId = setInterval(() => this.gameLoop(), 100);
     }
     
