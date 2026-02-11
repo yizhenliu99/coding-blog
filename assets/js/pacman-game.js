@@ -122,10 +122,12 @@ class PacManGame {
             this.maze[this.pacman.y][this.pacman.x] = 0;
             this.score += 10;
             this.pelletsRemaining--;
+            this.updateUI();
             
             if (this.pelletsRemaining === 0) {
                 this.gameRunning = false;
                 console.log('Level Complete!');
+                this.updateUI();
             }
         }
     }
@@ -148,9 +150,9 @@ class PacManGame {
                     this.ctx.fillStyle = '#000000';
                     this.ctx.fillRect(x * this.TILE_SIZE, y * this.TILE_SIZE, this.TILE_SIZE, this.TILE_SIZE);
                 } else if (cell === 2) {
-                    // Pellet
-                    this.ctx.fillStyle = '#CCCCCC';
-                    const pelletSize = 2;
+                    // Pellet - BLACK
+                    this.ctx.fillStyle = '#000000';
+                    const pelletSize = 3;
                     this.ctx.fillRect(
                         x * this.TILE_SIZE + this.TILE_SIZE / 2 - pelletSize / 2,
                         y * this.TILE_SIZE + this.TILE_SIZE / 2 - pelletSize / 2,
@@ -163,22 +165,49 @@ class PacManGame {
     }
     
     drawPacman() {
-        const x = this.pacman.x * this.TILE_SIZE;
-        const y = this.pacman.y * this.TILE_SIZE;
-        const radius = this.TILE_SIZE / 2 - 1;
+        const x = this.pacman.x * this.TILE_SIZE + this.TILE_SIZE / 2;
+        const y = this.pacman.y * this.TILE_SIZE + this.TILE_SIZE / 2;
+        const radius = this.TILE_SIZE / 2 - 2;
         
+        // Yellow circle head
         this.ctx.fillStyle = '#FFFF00';
         this.ctx.beginPath();
-        this.ctx.arc(x + radius + 1, y + radius + 1, radius, 0, Math.PI * 2);
+        this.ctx.arc(x, y, radius, 0, Math.PI * 2);
         this.ctx.fill();
+        this.ctx.strokeStyle = '#000000';
+        this.ctx.lineWidth = 1;
+        this.ctx.stroke();
+        
+        // Eye
+        this.ctx.fillStyle = '#000000';
+        const eyeX = x + radius * 0.5;
+        const eyeY = y - radius * 0.3;
+        this.ctx.beginPath();
+        this.ctx.arc(eyeX, eyeY, 1.5, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        // Mouth (based on direction)
+        this.ctx.strokeStyle = '#000000';
+        this.ctx.lineWidth = 1.5;
+        this.ctx.beginPath();
+        
+        if (this.pacman.dir === 0) { // Right
+            this.ctx.arc(x + radius * 0.2, y + radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
+        } else if (this.pacman.dir === 1) { // Down
+            this.ctx.arc(x + radius * 0.2, y + radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
+        } else if (this.pacman.dir === 2) { // Left
+            this.ctx.arc(x - radius * 0.2, y + radius * 0.2, 2, Math.PI - Math.PI / 4, Math.PI + Math.PI / 4);
+        } else if (this.pacman.dir === 3) { // Up
+            this.ctx.arc(x + radius * 0.2, y - radius * 0.2, 2, -Math.PI / 4, Math.PI / 4);
+        }
+        
+        this.ctx.stroke();
     }
     
-    drawUI() {
-        this.ctx.fillStyle = '#000000';
-        this.ctx.font = '14px Calibri';
-        this.ctx.fillText(`Score: ${this.score}`, 10, this.canvas.height + 20);
-        this.ctx.fillText(`Lives: ${this.lives}`, 150, this.canvas.height + 20);
-        this.ctx.fillText(`Pellets: ${this.pelletsRemaining}`, 250, this.canvas.height + 20);
+    updateUI() {
+        document.getElementById('scoreValue').textContent = this.score;
+        document.getElementById('livesValue').textContent = this.lives;
+        document.getElementById('pelletsValue').textContent = this.pelletsRemaining;
     }
     
     draw() {
@@ -197,6 +226,7 @@ class PacManGame {
     }
     
     start() {
+        this.updateUI();
         this.gameLoopId = setInterval(() => this.gameLoop(), 100);
     }
     

@@ -10,14 +10,51 @@
         .game-container {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             margin: 2rem 0;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
         
         #gameCanvas {
             border: 2px solid #000;
             background-color: #fff;
             display: block;
+        }
+        
+        .game-panel {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 4px;
+            min-width: 200px;
+        }
+        
+        .panel-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #000;
+            padding-bottom: 0.5rem;
+        }
+        
+        .panel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.8rem 0;
+            font-size: 1rem;
+        }
+        
+        .panel-label {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .panel-value {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #000;
         }
         
         .game-info {
@@ -41,6 +78,17 @@
         .controls p {
             margin: 0.5rem 0;
             color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-panel {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
@@ -75,21 +123,36 @@
             <p class="lead text-muted">Navigate the maze, eat pellets, and avoid ghosts!</p>
         </div>
 
-        <!-- Game Canvas -->
+        <!-- Game Canvas and Panel -->
         <div class="game-container">
             <canvas id="gameCanvas" width="400" height="400"></canvas>
-        </div>
-
-        <!-- Game Info -->
-        <div class="game-info">
-            <p><strong>Score, Lives, and Pellets display below the game</strong></p>
+            
+            <!-- Game Info Panel -->
+            <div class="game-panel">
+                <div class="panel-title">Game Status</div>
+                
+                <div class="panel-item">
+                    <span class="panel-label">Score:</span>
+                    <span class="panel-value" id="scoreValue">0</span>
+                </div>
+                
+                <div class="panel-item">
+                    <span class="panel-label">Lives:</span>
+                    <span class="panel-value" id="livesValue">3</span>
+                </div>
+                
+                <div class="panel-item">
+                    <span class="panel-label">Pellets Left:</span>
+                    <span class="panel-value" id="pelletsValue">0</span>
+                </div>
+            </div>
         </div>
 
         <!-- Controls -->
         <div class="controls">
             <h5>How to Play</h5>
             <p><strong>Arrow Keys</strong> or <strong>WASD</strong> to move Pac-Man</p>
-            <p>Eat all the pellets to complete the level</p>
+            <p>Eat all the black pellets to complete the level</p>
             <p>Avoid the ghosts coming in Problem 2.2!</p>
         </div>
 
