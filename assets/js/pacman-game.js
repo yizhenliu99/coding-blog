@@ -1,4 +1,4 @@
-// Pac-Man Game - Problem 2.2: Ghosts with Difficulty
+// Pac-Man Game - Problem 2.3: Roses and Heart Projectiles
 class Ghost {
     constructor(x, y, color, difficulty) {
         this.x = x;
@@ -8,13 +8,14 @@ class Ghost {
         this.color = color;
         this.dir = Math.floor(Math.random() * 4);
         this.moveCounter = 0;
+        this.alive = true;
         
         // Adjust speed by difficulty
         if (difficulty === 'easy') this.moveFrequency = 3;
         else if (difficulty === 'medium') this.moveFrequency = 2;
         else this.moveFrequency = 1;
         
-        this.escapeMode = true; // Try to escape ghost house first
+        this.escapeMode = true;
         this.escapeCounter = 0;
     }
     
@@ -22,6 +23,7 @@ class Ghost {
         this.x = this.startX;
         this.y = this.startY;
         this.dir = Math.floor(Math.random() * 4);
+        this.alive = true;
         this.escapeMode = true;
         this.escapeCounter = 0;
     }
