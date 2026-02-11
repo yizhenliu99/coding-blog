@@ -97,15 +97,14 @@ class PacManGame {
     
     createGhosts() {
         const ghostConfigs = [
-            { x: 8, y: 8, color: '#FF0000' },      // Red - top left
-            { x: 11, y: 8, color: '#FFB6C1' },     // Pink - top right
-            { x: 8, y: 12, color: '#00FFFF' },     // Cyan - bottom left
-            { x: 11, y: 12, color: '#FFB347' }     // Orange - bottom right
+            { x: 6, y: 10, color: '#FF0000' },      // Red - left
+            { x: 13, y: 10, color: '#FFB6C1' },     // Pink - right
+            { x: 9, y: 12, color: '#00FFFF' }       // Cyan - bottom center
         ];
         
         let ghostCount = 1;
         if (this.difficulty === 'medium') ghostCount = 2;
-        else if (this.difficulty === 'hard') ghostCount = 4;
+        else if (this.difficulty === 'hard') ghostCount = 3;
         
         this.ghosts = [];
         for (let i = 0; i < ghostCount; i++) {
