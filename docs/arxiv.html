@@ -259,7 +259,7 @@
                             ${escapeHtml(shortSummary)}
                         </div>
                         ${paper.summary.length > 300 ? `
-                            <div class="toggle-summary" onclick="toggleSummary(${index})">
+                            <div class="toggle-summary" onclick="toggleSummary(event, ${index})">
                                 Show More ▼
                             </div>
                         ` : ''}
@@ -274,7 +274,7 @@
             document.getElementById('content').style.display = 'block';
         }
         
-        function toggleSummary(index) {
+        function toggleSummary(event, index) {
             const summary = document.getElementById(`summary-${index}`);
             const isCollapsed = summary.classList.contains('collapsed');
             
