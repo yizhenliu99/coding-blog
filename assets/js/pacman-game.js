@@ -58,6 +58,7 @@ class PacManGame {
         
         // Heart projectiles
         this.hearts = [];
+        this.heartCooldown = 0;
         
         // Maze (0 = empty, 1 = wall, 2 = pellet)
         this.maze = [
@@ -170,10 +171,15 @@ class PacManGame {
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.pacman.nextDir = 2;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) this.pacman.nextDir = 3;
         
-        // Shoot hearts when powered up and B is pressed
+        // Shoot hearts when powered up and B is pressed (with cooldown)
         if (this.poweredUp && (this.keys['b'] || this.keys['B'])) {
-            this.shootHeart();
+            if (this.heartCooldown <= 0) {
+                this.shootHeart();
+                this.heartCooldown = 10; // Fire every 10 ticks = roughly 1 per second
+            }
         }
+        
+        this.heartCooldown--;
     }
     
     shootHeart() {
