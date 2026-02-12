@@ -171,18 +171,6 @@ class PacManGame {
         if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) this.pacman.nextDir = 1;
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.pacman.nextDir = 2;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) this.pacman.nextDir = 3;
-        
-        // Shoot hearts when powered up and B is held down
-        const isBPressed = this.keys['b'] || this.keys['B'];
-        if (this.poweredUp && isBPressed) {
-            if (!this.lastBKeyPressed) {
-                // B was just pressed (key down event)
-                this.shootHeart();
-            }
-            this.lastBKeyPressed = true;
-        } else {
-            this.lastBKeyPressed = false;
-        }
     }
     
     shootHeart() {
@@ -245,7 +233,7 @@ class PacManGame {
             this.roseSpawnCounter++;
             if (!this.rose && this.roseSpawnCounter > this.roseRespawnTime) {
                 this.spawnRose();
-                this.roseRespawnTime = Math.floor(Math.random() * 100) + 50; // 0.5-1 seconds
+                this.roseRespawnTime = Math.floor(Math.random() * 100) + 50;
                 this.roseSpawnCounter = 0;
             }
         } else {
@@ -260,6 +248,13 @@ class PacManGame {
                         ghost.reset();
                     }
                 }
+            }
+            
+            // Auto-shoot hearts when powered up
+            this.heartCooldown--;
+            if (this.heartCooldown <= 0) {
+                this.shootHeart();
+                this.heartCooldown = 5; // Fire every 5 ticks for continuous shooting
             }
         }
     }
