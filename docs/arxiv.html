@@ -235,9 +235,7 @@
             let html = '';
             papers.forEach((paper, index) => {
                 const authors = paper.authors.join(', ');
-                const shortSummary = paper.summary.length > 300 
-                    ? paper.summary.substring(0, 300) + '...' 
-                    : paper.summary;
+                const needsToggle = paper.summary.length > 300;
                 
                 html += `
                     <div class="paper-card">
@@ -255,10 +253,10 @@
                         <div>
                             <span class="paper-category">${escapeHtml(paper.category)}</span>
                         </div>
-                        <div class="paper-summary collapsed" id="summary-${index}">
-                            ${escapeHtml(shortSummary)}
+                        <div class="paper-summary ${needsToggle ? 'collapsed' : ''}" id="summary-${index}">
+                            ${escapeHtml(paper.summary)}
                         </div>
-                        ${paper.summary.length > 300 ? `
+                        ${needsToggle ? `
                             <div class="toggle-summary" onclick="toggleSummary(event, ${index})">
                                 Show More ▼
                             </div>
