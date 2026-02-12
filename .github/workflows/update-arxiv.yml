@@ -1,0 +1,42 @@
+name: Update arXiv Papers
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  update-arxiv:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Fetch papers from arXiv
+      run: |
+        python scripts/fetch-arxiv.py
+    
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Check if there are changes
+        if git diff --quiet docs/data/arxiv.json; then
+          echo "No changes to commit"
+        else
+          git add docs/data/arxiv.json
+          git commit -m "chore: update arXiv papers [skip ci]"
+          git push
+        fi
