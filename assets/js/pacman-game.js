@@ -59,6 +59,7 @@ class PacManGame {
         // Heart projectiles
         this.hearts = [];
         this.heartCooldown = 0;
+        this.lastBKeyPressed = false;
         
         // Maze (0 = empty, 1 = wall, 2 = pellet)
         this.maze = [
@@ -171,15 +172,17 @@ class PacManGame {
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.pacman.nextDir = 2;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) this.pacman.nextDir = 3;
         
-        // Shoot hearts when powered up and B is pressed (with cooldown)
-        if (this.poweredUp && (this.keys['b'] || this.keys['B'])) {
-            if (this.heartCooldown <= 0) {
+        // Shoot hearts when powered up and B is held down
+        const isBPressed = this.keys['b'] || this.keys['B'];
+        if (this.poweredUp && isBPressed) {
+            if (!this.lastBKeyPressed) {
+                // B was just pressed (key down event)
                 this.shootHeart();
-                this.heartCooldown = 10; // Fire every 10 ticks = roughly 1 per second
             }
+            this.lastBKeyPressed = true;
+        } else {
+            this.lastBKeyPressed = false;
         }
-        
-        this.heartCooldown--;
     }
     
     shootHeart() {
@@ -221,11 +224,15 @@ class PacManGame {
             }
             
             // Check collision with ghosts
+            let hitGhost = false;
             for (let ghost of this.ghosts) {
                 if (ghost.alive && heart.x === ghost.x && heart.y === ghost.y) {
                     ghost.alive = false;
+                    console.log('Ghost eliminated! Score +50');
                     this.hearts.splice(i, 1);
                     this.score += 50;
+                    this.updateUI();
+                    hitGhost = true;
                     break;
                 }
             }
@@ -416,6 +423,7 @@ class PacManGame {
             
             if (this.pacman.x === ghost.x && this.pacman.y === ghost.y) {
                 this.lives--;
+                console.log('Hit by ghost! Lives remaining:', this.lives);
                 this.updateUI();
                 
                 if (this.lives <= 0) {
@@ -423,8 +431,10 @@ class PacManGame {
                     this.gameOver = true;
                     document.getElementById('gameStatus').textContent = 'Game Over! Refresh to play again.';
                 } else {
+                    // Reset position
                     this.pacman.x = 9;
                     this.pacman.y = 15;
+                    // Reset all ghosts
                     for (let g of this.ghosts) {
                         g.reset();
                     }
