@@ -186,13 +186,20 @@ class PacManGame {
         const dx = [1, 0, -1, 0];
         const dy = [0, 1, 0, -1];
         
+        // Use the direction Pac-Man is trying to move (nextDir), or last moved direction (dir)
+        const shootDir = this.pacman.dir;
+        
         const heart = {
-            x: this.pacman.x + dx[this.pacman.dir],
-            y: this.pacman.y + dy[this.pacman.dir],
-            dir: this.pacman.dir
+            x: this.pacman.x + dx[shootDir],
+            y: this.pacman.y + dy[shootDir],
+            dir: shootDir
         };
         
-        this.hearts.push(heart);
+        // Only add heart if starting position is valid
+        if (!this.isWall(heart.x, heart.y)) {
+            this.hearts.push(heart);
+            console.log('Heart shot in direction', shootDir);
+        }
     }
     
     moveHearts() {
